@@ -6,15 +6,30 @@
 import matplotlib.pyplot as plt
 #import datetime
 from datetime import datetime, date, time
-import numpy as np
+#import numpy as np
 
 import re
+from dateutil import tz
+import fileinput
 
 
-file = open('2016-04-12_TMP112.txt')
+# curl "http://beehive1.mcs.anl.gov/api/1/nodes/0000001e06102bea/export?date=2016-04-12" > 2016-04-12.txt
+# grep ";TMP112" 2016-04-12.txt > 2016-04-12_TMP112.txt
+
+# curl "http://beehive1.mcs.anl.gov/api/1/nodes/0000001e06102bea/export?date=2016-04-12" | grep ";TMP112"  > 2016-04-12_TMP112.txt
+# cat 2016-04-12_TMP112.txt | ./temperature.py
+
+
+
+
+from_zone = tz.gettz('UTC')
+to_zone = tz.gettz('America/Chicago')
+
+
+#file = open('2016-04-12_TMP112.txt')
 dates=[]
 values=[]
-for line in file:
+for line in fileinput.input():
     #print line
     array = line.split(';')
     date_str = array[5]
@@ -27,7 +42,11 @@ for line in file:
     except:
         date_object = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
     
-    print str(date_object)
+    date_object = date_object.replace(tzinfo=from_zone)
+    print "utc: ", str(date_object)
+    # convert to local timezone
+    date_object = date_object.astimezone(to_zone)
+    print "local: ", str(date_object)
     #print "value_str: ", value_str
     value = float(re.findall("[-+]?\d*\.\d+|\d+", value_str)[0])
     
@@ -40,4 +59,5 @@ for line in file:
 #y = np.random.randint(100, size=x.shape)
 
 plt.plot(dates,values)
-plt.show()
+plt.savefig('testplot.png')
+#plt.show()
