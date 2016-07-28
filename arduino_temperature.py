@@ -21,11 +21,18 @@ with Serial(device, 9600, timeout=8, writeTimeout=8) as serial:
             if line[0] == "{":
                 try:
                     data = json.loads(line)
-                except:
+                except Exception as e:
+                    print(str(e))
                     continue
                     
                 data['timestamp'] = datetime.now().isoformat()
                 print(json.dumps(data))
-        except:
+            else:
+                print("error reading:", line)
+        except Exception as e:
+            print(str(e))
             break
         time.sleep(30)
+        
+        
+        
