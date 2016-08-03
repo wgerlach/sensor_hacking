@@ -37,7 +37,7 @@ client.create_database('sensor')
 
 #result = client.query('select value from temperature;')
 
-print("Result: {0}".format(result))
+#print("Result: {0}".format(result))
 
 #line = '17/Dec/2011:09:48:49 -0600'
 #line = line.split(' ')[0]
