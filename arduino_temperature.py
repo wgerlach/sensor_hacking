@@ -15,7 +15,7 @@ import json
 
 
 
-# from influxdb import InfluxDBClient
+from influxdb import InfluxDBClient
 
 #json_body = [
 #    {
