@@ -2,10 +2,13 @@
 
 from serial import Serial
 
-
 import time
 from datetime import datetime, timezone
 import json
+
+
+
+# apt-get install -y python3-serial
 
 #line = '17/Dec/2011:09:48:49 -0600'
 #line = line.split(' ')[0]
@@ -18,17 +21,20 @@ with Serial(device, 9600, timeout=8, writeTimeout=8) as serial:
     while True:
         try:
             line = serial.readline().decode().strip()
-            if line[0] == "{":
-                try:
-                    data = json.loads(line)
-                except Exception as e:
-                    print(str(e))
-                    continue
+            if line:
+                if line[0] == "{":
+                    try:
+                        data = json.loads(line)
+                    except Exception as e:
+                        print(str(e))
+                        continue
                     
-                data['timestamp'] = datetime.now().isoformat()
-                print(json.dumps(data))
+                    data['timestamp'] = datetime.now().isoformat()
+                    print(json.dumps(data))
+                else:
+                    print("error parsing, got: \"%s\"" % (line))
             else:
-                print("error reading:", line)
+                print("no data")
         except Exception as e:
             print(str(e))
             break
