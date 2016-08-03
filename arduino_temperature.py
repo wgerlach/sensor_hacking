@@ -39,6 +39,12 @@ client.create_database('sensor')
 
 #print("Result: {0}".format(result))
 
+def show_data():
+    result = client.query('select value from temperature;')
+    for i in result.get_points():
+        print(i)
+
+
 #line = '17/Dec/2011:09:48:49 -0600'
 #line = line.split(' ')[0]
 #print  time.strptime(line,"%d/%b/%Y:%H:%M:%S")
@@ -76,7 +82,7 @@ with Serial(device, 9600, timeout=8, writeTimeout=8) as serial:
         except Exception as e:
             print(str(e))
             break
-        time.sleep(5)
+        time.sleep(30)
         
         
         
